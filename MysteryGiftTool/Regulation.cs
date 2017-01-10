@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
-using MysteryGiftTool.Properties;
-
 using PKHeX.Core;
 
 namespace MysteryGiftTool
 {
-    class RegulationArchive
+    internal class RegulationArchive
     {
-        public List<Regulation> Regulations;
-        public string Name;
+        private readonly List<Regulation> Regulations;
+        private readonly string Name;
 
         public RegulationArchive(byte[] archive, string name)
         {
@@ -57,9 +51,9 @@ namespace MysteryGiftTool
         }
     }
 
-    class Regulation
+    internal class Regulation
     {
-        public byte[] Data;
+        public readonly byte[] Data;
 
         private string[] BattleTypes ={"Singles", "Doubles", "[Type 3 - Battle Royale?]", "[Type 4]"};
         private string[] LevelTypes = {"Normal", "Minimum", "Maximum", "Scale Down", "Set", "Scale Up"};
