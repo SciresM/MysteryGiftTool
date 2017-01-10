@@ -61,7 +61,7 @@ namespace MysteryGiftTool
     {
         public byte[] Data;
 
-        private string[] BattleTypes ={"Singles", "Doubles", "Triples", "Rotation"};
+        private string[] BattleTypes ={"Singles", "Doubles", "[Type 3 - Battle Royale?]", "[Type 4]"};
         private string[] LevelTypes = {"Normal", "Minimum", "Maximum", "Scale Down", "Set", "Scale Up"};
 
         public string Title => Util.TrimFromZero(Encoding.Unicode.GetString(Data, 0x3FC, 0x4A));
