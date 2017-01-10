@@ -126,7 +126,7 @@ namespace MysteryGiftTool
             sb.AppendLine("=====");
             for (var i = 0; i < GameInfo.Strings.itemlist.Length; i++)
             {
-                var ofs = i / 8 + 0x7C;
+                var ofs = i / 8 + 0x17C;
                 if (((Data[ofs] >> (i % 8)) & 1) != 1)
                     sb.AppendLine(GameInfo.Strings.itemlist[i]);
             }
@@ -137,7 +137,7 @@ namespace MysteryGiftTool
             sb.AppendLine("=====");
             for (var i = 0; i < GameInfo.Strings.itemlist.Length; i++)
             {
-                var ofs = i / 8 + 0x7C;
+                var ofs = i / 8 + 0x17C;
                 if (((Data[ofs] >> (i % 8)) & 1) == 1)
                     sb.AppendLine(GameInfo.Strings.itemlist[i]);
             }
@@ -148,7 +148,7 @@ namespace MysteryGiftTool
             sb.AppendLine("=====");
             for (var i = 0; i < GameInfo.Strings.movelist.Length; i++)
             {
-                var ofs = i / 8 + 0x7C;
+                var ofs = i / 8 + 0xFC;
                 if (((Data[ofs] >> (i % 8)) & 1) != 1)
                     sb.AppendLine(GameInfo.Strings.movelist[i]);
             }
@@ -159,7 +159,7 @@ namespace MysteryGiftTool
             sb.AppendLine("=====");
             for (var i = 0; i < GameInfo.Strings.movelist.Length; i++)
             {
-                var ofs = i / 8 + 0x7C;
+                var ofs = i / 8 + 0xFC;
                 if (((Data[ofs] >> (i % 8)) & 1) == 1)
                     sb.AppendLine(GameInfo.Strings.movelist[i]);
             }
