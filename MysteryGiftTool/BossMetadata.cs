@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MysteryGiftTool
 {
-    class BossMetadata
+    internal class BossMetadata
     {
         public string Name;
-        public string Type;
-        public string ID;
-        public string ContentSize;
-        public string TimeStamp;
+        private string Type;
+        private string ID;
+        private string ContentSize;
+        private string TimeStamp;
 
         public string ArchiveName => $"{Name}-_-{Type}-_-{ID}-_-{TimeStamp}";
 
@@ -20,9 +16,9 @@ namespace MysteryGiftTool
 
         public static BossMetadata FromString(string desc)
         {
-            var spl = desc.Split(new[]{ '\t' });
-            if (spl.Count() != 7)
-                throw new ArgumentException($"Bad boss string ({spl.Count()}, {string.Join(",", spl)}): {desc}");
+            var spl = desc.Split('\t');
+            if (spl.Length != 7)
+                throw new ArgumentException($"Bad boss string ({spl.Length}, {string.Join(",", spl)}): {desc}");
             return new BossMetadata
             {
                 Name = spl[0],
@@ -35,9 +31,9 @@ namespace MysteryGiftTool
 
         public static BossMetadata FromArchiveName(string an)
         {
-            var spl = an.Split(new string[] {"-_-"}, StringSplitOptions.None);
-            if (spl.Count() != 4)
-                throw new ArgumentException($"Bad boss string ({spl.Count()}, {string.Join(",", spl)}): {an}");
+            var spl = an.Split(new[] {"-_-"}, StringSplitOptions.None);
+            if (spl.Length != 4)
+                throw new ArgumentException($"Bad boss string ({spl.Length}, {string.Join(",", spl)}): {an}");
             return new BossMetadata
             {
                 Name = spl[0],

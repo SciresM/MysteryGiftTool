@@ -3,43 +3,27 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography.X509Certificates;
 
 using MysteryGiftTool.Properties;
 
 namespace MysteryGiftTool
 {
-    public class NetworkUtils
+    public static class NetworkUtils
     {
-        public static IPAddress crypto_ip = new IPAddress(new byte[] {192, 168, 1, 137});
-        public static int crypto_port = 8081;
+        private static readonly IPAddress crypto_ip = new IPAddress(new byte[] {192, 168, 1, 137});
+        private const int crypto_port = 8081;
+
         public static byte[] TryDownload(string file)
         {
             try
             {
                 return new WebClient().DownloadData(file);
             }
-            catch (WebException wex)
+            catch (WebException)
             {
                 Program.Log($"Failed to download {file}.");
                 return null;
-            }
-        }
-
-        public static byte[] DownloadFirstBytes(string file)
-        {
-            const int bytes = 0x400;
-            var req = (HttpWebRequest)WebRequest.Create(file);
-            req.AddRange(0, bytes - 1);
-
-            using (var resp = req.GetResponse())
-            using (var stream = resp.GetResponseStream())
-            {
-                var buf = new byte[bytes];
-                var read = stream.Read(buf, 0, bytes);
-                Array.Resize(ref buf, read);
-                return buf;
             }
         }
 
@@ -76,7 +60,7 @@ namespace MysteryGiftTool
                 Array.Copy(boss, ofs, buf, 0, buf.Length);
                 try
                 {
-                    var s = sock.Send(buf);
+                    sock.Send(buf);
                     var r = buf.Length;
                     while (r > 0)
                     {
@@ -87,7 +71,7 @@ namespace MysteryGiftTool
                         Array.Resize(ref buf, r);
                     }
                 }
-                catch (SocketException sex)
+                catch (SocketException)
                 {
                     Program.Log("Failed to decrypt BOSS file due to socket connection error.");
                     sock.Close();
@@ -134,7 +118,7 @@ namespace MysteryGiftTool
                 {
                     var buf = new byte[ofs + bufsize < test_vector.Length ? bufsize : test_vector.Length - ofs];
                     Array.Copy(test_vector, ofs, buf, 0, buf.Length);
-                    var s = sock.Send(buf);
+                    sock.Send(buf);
                     var r = buf.Length;
                     while (r > 0)
                     {
@@ -175,7 +159,7 @@ namespace MysteryGiftTool
             wr.Method = WebRequestMethods.Http.Get;
             wr.ClientCertificates.Clear();
             wr.ClientCertificates.Add(ClCertA);
-            var response = string.Empty;
+            string response;
             try
             {
                 using (var resp = wr.GetResponse() as HttpWebResponse)

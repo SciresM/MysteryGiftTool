@@ -1,29 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
-
 using PKHeX.Core;
 
 namespace MysteryGiftTool
 {
-    class Game
+    internal class Game
     {
         public string Name;
         public string ID;
         public int Generation;
     }
-    class Program
+
+    internal static class Program
     {
-        public static DateTime now = DateTime.Now;
-        private static bool keep_log = false;
+        private static DateTime now = DateTime.Now;
+        private static bool keep_log;
         private static StreamWriter log;
-        private static string filelist_server = "https://npfl.c.app.nintendowifi.net/p01/filelist/{0}/FGONLYT?ap=11012900000";
-        private static string file_server = "https://npdl.cdn.nintendowifi.net/p01/nsa/{0}/FGONLYT/{1}?ap=11012900000&tm=2";
+        private const string filelist_server = "https://npfl.c.app.nintendowifi.net/p01/filelist/{0}/FGONLYT?ap=11012900000";
+        private const string file_server = "https://npdl.cdn.nintendowifi.net/p01/nsa/{0}/FGONLYT/{1}?ap=11012900000&tm=2";
 
         private static readonly Game[] games =
         {
@@ -48,7 +45,7 @@ namespace MysteryGiftTool
         }
 
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
 
             CreateDirectoryIfNull("logs");
@@ -92,7 +89,7 @@ namespace MysteryGiftTool
                 File.Delete(log_file);
         }
 
-        static void UpdateArchives()
+        private static void UpdateArchives()
         {
             foreach (var game in games)
             {
@@ -149,7 +146,7 @@ namespace MysteryGiftTool
             }
         }
 
-        static void ExtractArchives()
+        private static void ExtractArchives()
         {
             foreach (var game in games)
             {
