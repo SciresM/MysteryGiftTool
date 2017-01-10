@@ -67,9 +67,10 @@ namespace MysteryGiftTool
         public int MinUsable => Data[8];
         public int MaxUsable => Data[9];
 
+        public int LegendariesAllowed => Data[0xA];
+
         public int LevelCap => Data[0xB];
         public string LevelStyle => LevelTypes[Data[0xC]];
-        public int LegendariesAllowed => Data[0xD];
         public bool SpeciesClause => Data[0xE] == 0;
         public bool ItemClause => Data[0xF] == 0;
 
