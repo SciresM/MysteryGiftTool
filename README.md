@@ -7,4 +7,4 @@ Note: Automatic decryption/extraction requires configuring a console on your loc
 
 Note: MysteryGiftTool makes use of [PKHeX-Core](https://github.com/kwsch/PKHeX).
 
-![Example of extracted mystery gifts](/img/example.png)
+![Example of extracted mystery gifts](/img/example.PNG)
