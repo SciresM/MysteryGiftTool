@@ -205,7 +205,7 @@ namespace MysteryGiftTool
                         Log(wc.FullDesc);
                         Log(MysteryGift.getDescription(wc));
                     }
-                    else if (boss.Name.ToUpper().Contains("CUP") && content_data.Length == 0x4C0)) // CUP Regulation
+                    else if (boss.Name.ToUpper().Contains("CUP") && content_data.Length == 0x4C0) // CUP Regulation
                     {
                         Log($"{boss.FileName} is a CUP!");
                         var cup_dir = Path.Combine("cups", game.Name);
