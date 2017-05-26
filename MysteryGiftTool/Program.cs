@@ -21,6 +21,7 @@ namespace MysteryGiftTool
         private static StreamWriter log;
         private const string filelist_server = "https://npfl.c.app.nintendowifi.net/p01/filelist/{0}/FGONLYT?ap=11012900000";
         private const string file_server = "https://npdl.cdn.nintendowifi.net/p01/nsa/{0}/FGONLYT/{1}?ap=11012900000&tm=2";
+        private static readonly CTR.AesEngine engine = new CTR.AesEngine();
 
         private static readonly Game[] games =
         {
@@ -44,10 +45,16 @@ namespace MysteryGiftTool
             log.WriteLine(msg);
         }
 
+        private static bool SelfTest()
+        {
+            var testBoss = ("0000000000000000000000000000000000000000000000000000000000000000" +
+                            "00000000000000004906070A85C541DF89F9A6574163130C6E4B0A341B1D93FE").ToByteArray();
+            var decBoss = engine.DecryptBOSS(testBoss);
+            return decBoss.All(t => t == 0);
+        }
 
         private static void Main(string[] args)
         {
-
             CreateDirectoryIfNull("logs");
             CreateDirectoryIfNull("data");
             CreateDirectoryIfNull("wondercards");
@@ -67,8 +74,9 @@ namespace MysteryGiftTool
             try
             {
                 UpdateArchives();
-                Log("Testing Crypto Server...");
-                if (NetworkUtils.TestCryptoServer())
+                Log("Testing CTRAesEngine...");
+
+                if (SelfTest())
                 {
                     keep_log = true;
                     Log("Decrypting and extracting gifts...");
@@ -165,7 +173,7 @@ namespace MysteryGiftTool
                     if (File.Exists(dec_path))
                         continue;
                     Log($"Decrypting {boss.FileName}...");
-                    var dec_data = NetworkUtils.TryDecryptBOSS(File.ReadAllBytes(file.FullName));
+                    var dec_data = engine.DecryptBOSS(File.ReadAllBytes(file.FullName));
                     if (dec_data == null)
                     {
                         Log($"Failed to decrypt {boss.FileName}");
