@@ -45,12 +45,21 @@ namespace MysteryGiftTool
             log.WriteLine(msg);
         }
 
-        private static bool SelfTest()
+        private static bool LoadBoot9()
         {
-            var testBoss = ("0000000000000000000000000000000000000000000000000000000000000000" +
-                            "00000000000000004906070A85C541DF89F9A6574163130C6E4B0A341B1D93FE").ToByteArray();
-            var decBoss = engine.DecryptBOSS(testBoss);
-            return decBoss.All(t => t == 0);
+            if (engine.IsBootRomLoaded) return true;
+            try
+            {
+                if (File.Exists("boot9.bin"))
+                    engine.LoadKeysFromBootromFile(File.ReadAllBytes("boot9.bin"));
+                else if (File.Exists("boot9_prot.bin"))
+                    engine.LoadKeysFromBootromFile(File.ReadAllBytes("boot9_prot.bin"));
+            }
+            catch
+            {
+                return false;
+            }
+            return engine.IsBootRomLoaded;
         }
 
         private static void Main(string[] args)
@@ -74,9 +83,9 @@ namespace MysteryGiftTool
             try
             {
                 UpdateArchives();
-                Log("Testing CTRAesEngine...");
+                Log("Loading 3DS arm9 bootrom...");
 
-                if (SelfTest())
+                if (LoadBoot9())
                 {
                     keep_log = true;
                     Log("Decrypting and extracting gifts...");
