@@ -21,6 +21,7 @@ namespace MysteryGiftTool
         private static StreamWriter log;
         private const string filelist_server = "https://npfl.c.app.nintendowifi.net/p01/filelist/{0}/FGONLYT?ap=11012900000";
         private const string file_server = "https://npdl.cdn.nintendowifi.net/p01/nsa/{0}/FGONLYT/{1}?ap=11012900000&tm=2";
+        private static readonly CTR.AesEngine engine = new CTR.AesEngine();
 
         private static readonly Game[] games =
         {
@@ -44,10 +45,25 @@ namespace MysteryGiftTool
             log.WriteLine(msg);
         }
 
+        private static bool LoadBoot9()
+        {
+            if (engine.IsBootRomLoaded) return true;
+            try
+            {
+                if (File.Exists("boot9.bin"))
+                    engine.LoadKeysFromBootromFile(File.ReadAllBytes("boot9.bin"));
+                else if (File.Exists("boot9_prot.bin"))
+                    engine.LoadKeysFromBootromFile(File.ReadAllBytes("boot9_prot.bin"));
+            }
+            catch
+            {
+                return false;
+            }
+            return engine.IsBootRomLoaded;
+        }
 
         private static void Main(string[] args)
         {
-
             CreateDirectoryIfNull("logs");
             CreateDirectoryIfNull("data");
             CreateDirectoryIfNull("wondercards");
@@ -67,8 +83,9 @@ namespace MysteryGiftTool
             try
             {
                 UpdateArchives();
-                Log("Testing Crypto Server...");
-                if (NetworkUtils.TestCryptoServer())
+                Log("Loading 3DS arm9 bootrom...");
+
+                if (LoadBoot9())
                 {
                     keep_log = true;
                     Log("Decrypting and extracting gifts...");
@@ -165,7 +182,7 @@ namespace MysteryGiftTool
                     if (File.Exists(dec_path))
                         continue;
                     Log($"Decrypting {boss.FileName}...");
-                    var dec_data = NetworkUtils.TryDecryptBOSS(File.ReadAllBytes(file.FullName));
+                    var dec_data = engine.DecryptBOSS(File.ReadAllBytes(file.FullName));
                     if (dec_data == null)
                     {
                         Log($"Failed to decrypt {boss.FileName}");
